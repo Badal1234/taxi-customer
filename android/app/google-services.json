@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "643343506674",
+    "firebase_url": "https://taxiapp-c85c5-default-rtdb.firebaseio.com",
+    "project_id": "taxiapp-c85c5",
+    "storage_bucket": "taxiapp-c85c5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:643343506674:android:e5041f8862e152d8ca846b",
+        "android_client_info": {
+          "package_name": "com.asurtransfer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "643343506674-c8dp2eg4jiof25tj5einhmv617ab34m9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.asurtransfer",
+            "certificate_hash": "7538b243be74a49156fb64e97fb1365f9639aaa3"
+          }
+        },
+        {
+          "client_id": "643343506674-8d59ruvk1t8fhb4qfc2110hjst2s6564.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2wxl6XfWa4FH4vpRpb7CHORv74hR2b4o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "643343506674-8d59ruvk1t8fhb4qfc2110hjst2s6564.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "643343506674-bedveugup4sd3noqpa75quqpopfsrsir.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.asurtransfer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
