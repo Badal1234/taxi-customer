@@ -105,7 +105,7 @@ const ProfileScreen = () => {
                 </View>
                 <View style={{flexDirection:'row', justifyContent:"space-between",alignItems:'center'}}>
                     <Text>
-                    {JSON.parse(details.location).place}
+                    {details.location?.place}
                     </Text>
                     <TouchableOpacity onPress={setCurrentLocation}>
                     <Icon name={'edit'} color={'black'} size={19}/>

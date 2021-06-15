@@ -1,5 +1,5 @@
 import React,{useEffect,useState,useRef} from 'react'
-import { View,Image,Text,StyleSheet, TouchableOpacity} from 'react-native'
+import { View,Image,Text,StyleSheet, TouchableOpacity, Alert} from 'react-native'
 import Polyline from '@mapbox/polyline';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
@@ -24,6 +24,7 @@ const DriverScreen = ({navigation,route}) => {
     useEffect(()=>{
         if(route.params){
             setRide(route.params)
+            console.log(route.params)
         }
     },[route.params])
     console.log('ride',ride)
@@ -76,19 +77,60 @@ const DriverScreen = ({navigation,route}) => {
 
     }
     console.log(distance)
-
+    console.log(ride)
+    function timeDiffCalc(dateFuture, dateNo) {
+        console.log(dateFuture)
+        let diffInMilliSeconds = Math.abs(dateFuture - dateNo) / 1000;
+    
+        // calculate days
+        const days = Math.floor(diffInMilliSeconds / 86400);
+        diffInMilliSeconds -= days * 86400;
+        console.log('calculated days', days);
+    
+        // calculate hours
+        const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
+        diffInMilliSeconds -= hours * 3600;
+        console.log('calculated hours', hours);
+    
+        // calculate minutes
+        const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
+        diffInMilliSeconds -= minutes * 60;
+        console.log('minutes', minutes);
+    
+        let difference = '';
+        if (days > 0) {
+          difference += (days === 1) ? `${days} day, ` : `${days} days, `;
+        }
+    
+        difference += (hours === 0 || hours === 1) ? `${hours} hour, ` : `${hours} hours, `;
+    
+        difference += (minutes === 0 || hours === 1) ? `${minutes} minutes` : `${minutes} minutes`; 
+    
+        return hours;
+      }
     const cancelRide = () => {
-        var user = auth().currentUser
-        database().ref(`users/${user.uid}/my_bookings/${ride.id}`).update({
-            status:'CANCELLED',
-            reason: reason
-        }).then(()=>{
-            database().ref(`users/${ride.driver}/my_bookings/${ride.id}`).remove()
-         database().ref(`bookings/${ride.id}`).update({
-             status:'CANCELLED',
-             reason: reason
-         })
-        })
+        console.log('fffff',timeDiffCalc( new Date(), new Date(ride.tripdate)))
+        if(timeDiffCalc(new Date(), new Date(ride.tripdate) ) >= 1){
+            Alert.alert('You can not cancel the Ride')
+        }else{
+            var user = auth().currentUser
+            database().ref(`users/${user.uid}/my_bookings/${ride.id}`).update({
+                status:'CANCELLED',
+                reason: reason
+            }).then(()=>{
+                database().ref(`users/${ride.driver}/my_bookings/${ride.id}`).remove()
+             database().ref(`bookings/${ride.id}`).update({
+                 status:'CANCELLED',
+                 reason: reason
+             }).then(()=> {
+                 Alert.alert('Ride has canceled')
+                 navigation.goBack()
+             })
+            })
+
+        }
+        
+
     }
 
     const renderButtons = () => {
@@ -199,7 +241,9 @@ const DriverScreen = ({navigation,route}) => {
                     </View>
                     {renderButtons()}
 
+
                 </View>
+              
                
 
 

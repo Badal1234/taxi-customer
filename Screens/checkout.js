@@ -1,5 +1,5 @@
 import React,{useEffect,useState} from 'react'
-import {View,Image,Text,TouchableOpacity,StyleSheet,FlatList,Dimensions} from 'react-native'
+import {View,Image,Text,TouchableOpacity,StyleSheet,FlatList,Dimensions, StatusBar} from 'react-native'
 import database from '@react-native-firebase/database';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import auth from '@react-native-firebase/auth';
@@ -48,9 +48,16 @@ const CheckoutScreen = ({navigation, route}) => {
 
     }
     const calculateDiscount = (item) => {
-        setkey(item.key)
-        if(item.promo_discount_type == 'flat') setDiscount(item.promo_discount_value.toFixed(2))
-        else setDiscount(item.grandTotal - (item.grandTotal) * (item.promo_discount_value/100).toFixed(2))
+        if(key == item.key){
+            setkey()
+            setDiscount(0)
+        }else{
+            setkey(item.key)
+            if(item.promo_discount_type == 'flat') setDiscount(item.promo_discount_value.toFixed(2))
+            else setDiscount(item.grandTotal - (item.grandTotal) * (item.promo_discount_value/100).toFixed(2))
+
+        }
+       
         
     }
     useEffect(() =>{
@@ -307,7 +314,8 @@ const styles = StyleSheet.create({
         shadowColor:'#000',
         shadowOffset:{height: 3, width: 3},
         elevation: 3,
-        borderRadius: 10
+        borderRadius: 10,
+        marginTop: StatusBar.currentHeight
     },
     coupon:{
         paddingVertical: 10,

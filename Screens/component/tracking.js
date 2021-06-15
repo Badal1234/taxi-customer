@@ -41,7 +41,7 @@ constructor(props) {
     dat.on('value',snapshot=>{
         console.log('data.current',snapshot.val())
            var data = snapshot.val()
-            if(data){
+            if(data.current){
                 let data = snapshot.val();
                  this.setState({latitude:data.current?.lat , longitude : data.current?.lng});
             }

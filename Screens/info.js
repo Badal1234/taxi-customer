@@ -30,11 +30,15 @@ const InfoScreen = ({navigation, route}) => {
 
       },[route.params])
       const submit = () => {
-          if(fields[0] == { name:'', number:'',email:'', passport:'' }){
-              Alert.alert('Please Enter Passenger Details')
+          if(fields.length >=1 && fields[0].name != '' && fields[0].email != '' && fields[0].number != '' && fields[0].passport != '' ){
+            navigation.navigate('checkout',{...details, passengers: fields})
+              
           }else{
-              navigation.navigate('checkout',{...details, passengers: fields})
+            Alert.alert('Please Enter Passenger Details')
+
           }
+          
+          
       }
 
       const renderButton = () => {
@@ -125,7 +129,8 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width - 30,
         height: 40,
         marginLeft: 10,
-        color:'black'
+        color:'black',
+        fontWeight:'700'
     },
     button:{
         justifyContent:'center',

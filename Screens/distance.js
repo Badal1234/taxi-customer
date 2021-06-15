@@ -1,9 +1,10 @@
 import React,{useEffect, useState, useRef} from 'react'
-import {View,StyleSheet,Dimensions, TouchableOpacity,Text,Image, Modal} from 'react-native'
+import {View,StyleSheet,Dimensions, TouchableOpacity,Text,Image} from 'react-native'
 import Polyline from '@mapbox/polyline';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome'
+import Modal from 'react-native-modal'
 let WIDTH = Dimensions.get('window').width
 let HEIGHT = Dimensions.get('window').height
 const DistanceScreen = ({navigation, route}) =>{
@@ -16,6 +17,9 @@ const DistanceScreen = ({navigation, route}) =>{
     const [car, setCar] = useState(false)
     const [distance, setDistance] = useState()
     const [duration, setDuration] = useState()
+    const [country, setCountry] = useState('')
+    const [warn, setWarn] = useState('')
+    const [modal, setModal] = useState(false)
     const map = useRef()
     const carArray = [{image:'', name:'', price:'', persons:'', details:''}]
 
@@ -53,6 +57,26 @@ const DistanceScreen = ({navigation, route}) =>{
       const showTimepicker = () => {
         showMode('time');
       };
+      function getAddressFromCoordinates({latitude, longitude}) {
+        return new Promise(resolve => {
+          const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyDwAYYq1Tn7jUJBVWMmyhv9UCOelRHMEFk`;
+          fetch(url)
+            .then(res => res.json())
+            .then(resJson => {
+              // the response had a deeply nested structure :/
+              resJson.results[0].address_components.map(item=>{
+                  if(item.types.includes('country')){
+                      setCountry(item.long_name)
+                  }
+              })
+              resolve(resJson.results[0].formatted_address);
+            })
+            .catch(e => {
+              console.log('Error in getAddressFromCoordinates', e);
+              resolve();
+            });
+        });
+      }
 
     const getDirections = async(startLoc, dropLoc ) => {
         var resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${dropLoc}&key=AIzaSyDwAYYq1Tn7jUJBVWMmyhv9UCOelRHMEFk`)
@@ -78,10 +102,30 @@ const DistanceScreen = ({navigation, route}) =>{
     useEffect(()=>{
         if(from  && to){
             getDirections('"' + from.latitude + ', ' + from.longitude + '"', '"' + to.latitude + ', ' + to.longitude + '"')
-
+            getAddressFromCoordinates({latitude: from.latitude, longitude: from.longitude})
         }
         
     },[from, to])
+
+    const warnModal = () => {
+        return(
+            <Modal isVisible={modal}>
+                <View style={{height: 70, width:'100%',backgroundColor:'#fff',justifyContent:'center',alignItems:'center'}}> 
+                <Text>
+                    {warn}
+                </Text>
+                <TouchableOpacity onPress={()=> setModal(false)} style={{width: 40, height: 30, backgroundColor:'black',justifyContent:'center',alignItems:'center'}}>
+                    <Text style={{color:'white'}}>
+                        Ok
+                    </Text>
+
+                </TouchableOpacity>
+
+                </View>
+
+            </Modal>
+        )
+    }
 
     const optionModal = () => {
         return(
@@ -110,7 +154,18 @@ const DistanceScreen = ({navigation, route}) =>{
                     <Icon name={'calendar'} color={'black'} size={21}/>
                 </View>
             </TouchableOpacity>
-          <TouchableOpacity onPress={()=> navigation.navigate('carSelect',{from: from, to: to, distance: distance, duration: duration,tripDate: date})} style={{paddingHorizontal: 120, 
+          <TouchableOpacity onPress={()=>
+          {
+              if(country == 'Turkey'){
+                navigation.navigate('carSelect',{from: from, to: to, distance: distance, duration: duration,tripDate: date})
+              }else{
+                  setModal(true)
+                  setWarn('We do not offer service in this location')
+              }
+            
+
+          } 
+         } style={{paddingHorizontal: 120, 
                 paddingVertical: 10, 
                 backgroundColor:'#243235', 
                 marginTop:30, borderRadius: 20}}>
@@ -194,6 +249,7 @@ const DistanceScreen = ({navigation, route}) =>{
 
             </MapView>
             {optionModal()}
+            {warnModal()}
             
             {show && (
         <DateTimePicker

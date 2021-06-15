@@ -64,7 +64,16 @@ const LoginScreen = ({navigation}) => {
     console.log(googleCredential)
   
     // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
+    cred = await auth().signInWithCredential(facebookCredential);
+    return database().ref(`users/${user.uid}`)
+    .once("value").then((snap)=>{
+      if(!snap.val()){
+        database().ref(`users/${user.uid}`)
+        .set({createdAt: new Date(), email:cred.user.email, firstName:cred.user.displayName, lastName:'', mobile: number, location: {...location},pushToken: token}).then(()=>{
+          navigation.goBack()
+        })
+      }
+  })
   }
   async function onFacebookButtonPress() {
     // Attempt login with permissions

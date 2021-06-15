@@ -14,6 +14,16 @@ const App = () =>{
   },[])
 
   useEffect(()=>{
+    Notifications.registerRemoteNotifications();
+
+    Notifications.events().registerRemoteNotificationsRegistered((event) => {
+        // TODO: Send the token to my server so it could send back push notifications...
+       // setToken(event.deviceToken)
+        console.log("Device Token Received", event.deviceToken);
+    });
+    Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
+        console.error(event);
+    });
     Notifications.events().registerNotificationReceivedBackground((notification, completion) => {
       console.log("Notification Received - Background", notification.payload);
 

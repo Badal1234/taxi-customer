@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react'
 import {View,StyleSheet,FlatList,Text,TouchableOpacity} from 'react-native'
 import database from '@react-native-firebase/database'
 import auth from '@react-native-firebase/auth'
-import { defineAnimation } from 'react-native-reanimated'
+import Icon from 'react-native-vector-icons/FontAwesome'
 const RideList = ({navigation}) => {
     const [rides, setRide] = useState()
     const week = ['Sun', 'Mon','Tue','Wed','Thu','Fri','Sat']
@@ -22,9 +22,15 @@ const RideList = ({navigation}) => {
     const renderHeader = ( ) => {
         return(
             <View style={styles.header}>
+                <View>
+               <Icon name={'bars'} color={'#fff'} size={22} onPress={() => navigation.openDrawer()} />
+                </View>
                 <Text style={{fontSize: 25, fontWeight:'bold', fontStyle:'italic',alignSelf:"center",color:'white'}}>
                     RideList
                 </Text>
+                <View>
+
+                </View>
             </View>
             )
     }
@@ -37,12 +43,14 @@ const RideList = ({navigation}) => {
                 return 'RUNNING'
             case 'COMPLETED':
                 return 'Ride has completed' 
-            case 'STARTED':
+            case 'START':
                 return 'Ride has started'
             case 'ACCEPTED':
                 return 'Driver accept your request'   
             case 'END':
-                return 'Completed'           
+                return 'Completed'
+            case 'CANCELLED':
+                return 'Cancelled'               
         }
 
 
@@ -50,12 +58,14 @@ const RideList = ({navigation}) => {
 
     const onClick = (state,item) => {
         switch (state) {
-            case 'STARTED':
+            case 'START':
                 return navigation.navigate('track',{...item})
             case 'ACCEPTED':
                 return navigation.navigate('driver',{...item})
             case  'END':
                 return  navigation.navigate('complete',{...item})
+            case 'CANCELLED':
+                return     
             default:
                 return  navigation.navigate('driver',{...item})    
 
@@ -131,7 +141,11 @@ const styles = StyleSheet.create({
     },
     header:{
         backgroundColor:'#243235',
-            paddingVertical: 20,justifyContent:'center',alignItems:'center',flexDirection:'row'
+            paddingVertical: 20,
+            justifyContent:'space-between',
+            alignItems:'center',
+            flexDirection:'row',
+            padding: 20
 
     },
 })

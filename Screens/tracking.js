@@ -9,6 +9,7 @@ const TripTrack = ({navigation, route}) => {
     useEffect(() =>{
         if(route.params){
             setDetails(route.params)
+            console.log(route.params)
         }
 
     },[route.params])
