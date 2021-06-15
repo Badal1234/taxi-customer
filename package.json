@@ -28,7 +28,6 @@
     "react": "17.0.1",
     "react-native": "0.64.0",
     "react-native-animated-splash-screen": "^2.0.5",
-    "react-native-fbsdk-next": "^4.3.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-google-places-autocomplete": "^2.2.0",
     "react-native-loading-spinner-overlay": "^2.0.0",
