@@ -3,10 +3,10 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-#import <Firebase.h>
-#import <GoogleMaps/
-#import "RNNotifications.h"
 
+#import <GoogleMaps/GoogleMaps.h>
+#import <Firebase.h>
+#import "RNNotifications.h"
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
