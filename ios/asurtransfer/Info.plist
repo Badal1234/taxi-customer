@@ -50,6 +50,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<dict>
 	<key>UIAppFonts</key>
 	<array>
 	<string>FontAwesome.ttf</string>
@@ -57,6 +58,8 @@
     <string>FontAwesome5_Regular.ttf</string>
     <string>FontAwesome5_Solid.ttf</string>
 	</array>
+	<dict/>
+
 
 	<false/>
 </dict>
