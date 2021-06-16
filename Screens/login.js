@@ -8,7 +8,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Notifications } from 'react-native-notifications';
 import Spinner from 'react-native-loading-spinner-overlay'
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 const WIDTH = Dimensions.get('window').width
@@ -75,37 +74,7 @@ const LoginScreen = ({navigation}) => {
       }
   })
   }
-  async function onFacebookButtonPress() {
-    // Attempt login with permissions
-    const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-  
-    if (result.isCancelled) {
-      throw 'User cancelled the login process';
-    }
-  
-    // Once signed in, get the users AccesToken
-    const data = await AccessToken.getCurrentAccessToken();
-  
-    if (!data) {
-      throw 'Something went wrong obtaining access token';
-    }
-  
-    // Create a Firebase credential with the AccessToken
-    const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
-  
-    // Sign-in the user with the credential
-    cred = await auth().signInWithCredential(facebookCredential);
-    return database().ref(`users/${user.uid}`)
-    .once("value").then((snap)=>{
-      if(!snap.val()){
-        database().ref(`users/${user.uid}`)
-        .set({createdAt: new Date(), email:cred.user.email, firstName:cred.user.displayName, lastName:'', mobile: number, location: {...location},pushToken: token}).then(()=>{
-          navigation.goBack()
-        })
-      }
-  })
-  
-}
+
 
   // Handle the button press
   async function signInWithPhoneNumber(phoneNumber) {

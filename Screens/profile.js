@@ -5,7 +5,8 @@ import database from '@react-native-firebase/database'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Geolocation from '@react-native-community/geolocation';
 import {request, PERMISSIONS} from 'react-native-permissions';
-const ProfileScreen = () => {
+import Spinner from 'react-native-loading-spinner-overlay'
+const ProfileScreen = ({navigation}) => {
     const [details, setDetails] = useState()
 
     useEffect(() =>{
@@ -19,9 +20,15 @@ const ProfileScreen = () => {
     const renderHeader = () => {
         return(
             <View style={styles.header}>
+                 <View>
+               <Icon name={'bars'} color={'#fff'} size={22} onPress={() => navigation.openDrawer()} />
+                </View>
                 <Text style={{fontSize: 19, color:'white', fontWeight:'bold'}}>
                     Profile
                 </Text>
+                <View>
+
+                </View>
              
             </View>
             )
@@ -69,46 +76,62 @@ const ProfileScreen = () => {
         return(
             <View>
                 <View>
+                    <Text style={{fontSize: 17, fontWeight:'bold', paddingLeft: 20}}>
+                        First Name
+                    </Text>
                     <TextInput
                     placeholder={'First Name'} 
                     onChangeText={text=> {
                         setDetails({...details,firstName: text})
                     }}
-                    value={details.firstName}/>
+                    value={details.firstName}
+                    style={{borderBottomWidth: 0.7, width: '70%', marginLeft: 20, fontSize: 12,height: 40}}/>
                     
                 </View>
                 <View>
+                    <Text style={{fontSize: 17, fontWeight:'bold', paddingLeft: 20}}>
+                        Last Name
+                    </Text>
                     <TextInput
                     placeholder={'Last Name'} 
                     onChangeText={text=> setDetails({...details,lastName: text})}
-                    value={details.lastName}/>
+                    value={details.lastName}
+                    style={{borderBottomWidth: 0.7, width: '70%', marginLeft: 20, fontSize: 12,height: 40}}/>
                     
                 </View>
                 <View>
                 <View>
+                    <Text style={{fontSize: 17, fontWeight:'bold', paddingLeft: 20}}>
+                        Email
+                    </Text>
                     <TextInput
                     placeholder={'Email'} 
                     onChangeText={text=> setDetails({...details,email: text})}
-                    value={details.email}/>
+                    value={details.email}
+                    style={{borderBottomWidth: 0.7, width: '70%', marginLeft: 20, fontSize: 12,height: 40}}/>
                     
                 </View>
                 </View>
                 <View>
                 <View>
+                    <Text style={{fontSize: 17, fontWeight:'bold', paddingLeft: 20}}>
+                        Number
+                    </Text>
                     <TextInput
                     placeholder={'Number'} 
                     onChangeText={text=>setDetails({...details,mobile: text})}
-                    value={details.mobile}/>
+                    value={details.mobile}
+                    style={{borderBottomWidth: 0.7, width: '70%', marginLeft: 20, fontSize: 12,height: 40}}/>
                     
                 </View>
                     
                 </View>
-                <View style={{flexDirection:'row', justifyContent:"space-between",alignItems:'center'}}>
-                    <Text>
+                <View style={{flexDirection:'row', justifyContent:"space-between",alignItems:'center', paddingTop: 20}}>
+                    <Text style={{fontSize: 14, fontWeight:'400', paddingLeft: 20}}>
                     {details.location?.place}
                     </Text>
-                    <TouchableOpacity onPress={setCurrentLocation}>
-                    <Icon name={'edit'} color={'black'} size={19}/>
+                    <TouchableOpacity  onPress={setCurrentLocation}>
+                    <Icon name={'edit'} color={'black'} size={19} />
 
                     </TouchableOpacity>
                     
@@ -128,9 +151,10 @@ const ProfileScreen = () => {
     }
     return (
         <View>
+            <Spinner  visible={!details} textContent={'Loading'}/>
             {renderHeader()}
             {details ? renderBody(): null}
-            {renderButton()}
+            {details ? renderButton() : null }
 
 
         </View>
@@ -140,7 +164,11 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
     header:{
         backgroundColor:'#243235',
-            paddingVertical: 20,justifyContent:'center',alignItems:'center',flexDirection:'row'
+            paddingVertical: 20,
+            flexDirection:'row',
+            justifyContent:'space-between',
+            alignItems:'center',
+            padding: 20
 
     },
     button:{

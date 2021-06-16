@@ -1,6 +1,8 @@
 import React,{useEffect,useState} from 'react'
 import {View,Text, TouchableOpacity,StyleSheet} from 'react-native'
 import Izyco from './component/gateaway'
+import database from '@react-native-firebase/database'
+import auth from '@react-native-firebase/auth'
 const PaymentScreen = ({navigation, route}) => {
     const [details, setDetails] = useState({})
     const [payModal, setModal] = useState(false)
@@ -22,6 +24,7 @@ const PaymentScreen = ({navigation, route}) => {
     }
 
     const makePayment = (method) => {
+        console.log(method)
         setDetails({...details, paymentMethod: method})
         if(method != 'CASH'){
            setModal(true)
@@ -66,7 +69,7 @@ const PaymentScreen = ({navigation, route}) => {
             )
             .update({
               payment_status: 'PAID',
-              payment_mode: details.paymentMode,
+              payment_mode: details.method,
               customer_paid: details.customer_paid,
               discount_amount: details.discount_amount,
               usedWalletMoney: details.usedWalletAmmount,
@@ -86,7 +89,7 @@ const PaymentScreen = ({navigation, route}) => {
                   getway: 'izyco',
                 })
                 .then(() => {
-                  navigation.navigate('home')
+                  navigation.navigate('confirm')
                 })
             })
         })
@@ -107,12 +110,12 @@ const PaymentScreen = ({navigation, route}) => {
                 </View>
                 <View style={{borderWidth: 1, marginTop: 30}}/>
                 <View>
-                    <TouchableOpacity onPress={()=>{}} style={styles.button}>
+                    <TouchableOpacity onPress={()=>makePayment('CASH')} style={styles.button}>
                         <Text style={{fontSize: 17, color:'white', fontWeight:'bold'}}>
                             Pay with Cash
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={makePayment}>
+                    <TouchableOpacity style={styles.button} onPress={()=> makePayment('CARD')}>
                         <Text style={{fontSize: 17, color:'white', fontWeight:'bold'}}>
                             Pay with Card
                         </Text>

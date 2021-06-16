@@ -1,7 +1,8 @@
+import  languageJSON from './language'
 export function RequestPushMsg(token,msg,customerUID){
     console.log('param=>',token,msg)
     console.log('fjkfjfjff')
-    var user = firebase.auth().currentUser
+   // var user = firebase.auth().currentUser
     fetch('https://us-central1-taxiapp-c85c5.cloudfunctions.net/sendPushNotification', {
   method: 'POST',
   headers: {

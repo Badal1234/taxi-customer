@@ -3,8 +3,9 @@ import {View,StyleSheet,FlatList,Text,TouchableOpacity} from 'react-native'
 import database from '@react-native-firebase/database'
 import auth from '@react-native-firebase/auth'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import Spinner from 'react-native-loading-spinner-overlay'
 const RideList = ({navigation}) => {
-    const [rides, setRide] = useState()
+    const [rides, setRide] = useState([])
     const week = ['Sun', 'Mon','Tue','Wed','Thu','Fri','Sat']
     const month = ['Jan','Feb','Mar','Apr','May','Jun','July','Aug','Sept','Oct','Nov','Dec']
     useEffect(()=>{
@@ -63,12 +64,21 @@ const RideList = ({navigation}) => {
             case 'ACCEPTED':
                 return navigation.navigate('driver',{...item})
             case  'END':
-                return  navigation.navigate('complete',{...item})
+                return  {}
             case 'CANCELLED':
                 return     
             default:
                 return  navigation.navigate('driver',{...item})    
 
+        }
+    }
+
+    const paymentStatus = (status) => {
+        switch (status) {
+            case 'WAITING':
+                return 'unpaid'
+            case 'PAID':
+            return 'Paid'
         }
     }
     const renderBody = () => {
@@ -99,9 +109,13 @@ const RideList = ({navigation}) => {
                         {item.tripDate}
                     </Text>
                     <View style={{flexDirection:'row',justifyContent:'space-between', paddingLeft: 10}}>
-                        <Text style={{fontSize: 16, fontWeight:'bold',color:'red'}}>
-                            {item.trip_cost ?item.trip_cost: null } ({item.payment_status == 'WAITING' ? 'Unpaid': null})
-                        </Text>
+                        {
+                            item.payment_status  ?                         <Text style={{fontSize: 16, fontWeight:'bold',color: item.paymentStatus == 'WAITING'? 'red': 'green'}}>
+                            {item.trip_cost ?item.trip_cost: null } ({paymentStatus(item.payment_status)})
+                        </Text> : <View></View>
+
+                        }
+
                         <Text style={{fontSize: 12, fontWeight:'bold'}}>
                             {showState(item.status)}
                         </Text>
@@ -118,6 +132,7 @@ const RideList = ({navigation}) => {
     }
      return( 
         <View style={{flex:1}}>
+            <Spinner visible={!rides.length} textContent={'Loading'}/>
             {renderHeader()}
             {renderBody()}
         </View>

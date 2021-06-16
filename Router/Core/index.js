@@ -11,6 +11,7 @@ import Ride from '../../Screens/rideList'
 import Track from '../../Screens/tracking'
 import Complete from '../../Screens/tripComplete'
 import Payment from '../../Screens/payment'
+import Chat from '../../Screens/chat'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -29,6 +30,7 @@ const AuthRoute = () =>{
           <Stack.Screen name="track" component={Track} />
           <Stack.Screen name="complete" component={Complete} />
           <Stack.Screen name="payment" component={Payment} />
+          <Stack.Screen name="chat" component={Chat} />
         </Stack.Navigator>
         )
 }

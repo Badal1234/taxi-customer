@@ -1,29 +1,27 @@
 import React, { Component } from "react";
 import {
-View,
-StyleSheet,
-Text,
-TouchableOpacity,
-FlatList,
-KeyboardAvoidingView,
-Dimensions,
-Keyboard,
-TouchableWithoutFeedback,
-StatusBar,
-TextInput
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  KeyboardAvoidingView,
+  Dimensions,
+  Keyboard,
+  StatusBar,
+  TextInput,
+  TouchableWithoutFeedback
 } from "react-native";
-import { colors } from "../common/theme";
-import { Icon, Header} from "react-native-elements";
+import  languageJSON  from './component/language';
+import { colors } from "./component/theme";
 import database from '@react-native-firebase/database'
-
-var { height } = Dimensions.get('window');
-
-
+var {  height } = Dimensions.get('window');
+import { RequestPushMsg } from './component/Notification';
 export default class OnlineChat extends Component {
   getParamData;
   constructor(props) {
-      super(props);
-      this.state = {
+    super(props);
+    this.state = {
         search: "",
         text: "",
         data:"" ,
@@ -38,212 +36,189 @@ export default class OnlineChat extends Component {
         position: 'absolute', 
         paddingHeight:0,
         messageCntHeight:height-150,
-        tripData:"",
-        idFound:false,
-        id:"",
         carbookedInfo:"",
-        allChat:[]
+        id:"",
+        chat:false,
+        allChat:[],
+        messegesData:[]
 
-      };
-      this.getChat()
-  }
-
-chatData(allChat){
-   console.log("My all chats are here",this.state.allChat);
-  }
-
-  getChat() {
-        this.getParamData = this.props.navigation.getParam('passData');
-        let msgData=database().ref(`chat/`+this.getParamData.bookingId + '/message')
-        msgData.on('value',msgData=>{
-                //console.log("msgData",msgData.val());
-                let rootEntry=msgData.val();
-                let allMessages=[]
-                for(let key in rootEntry){
-                        //console.log("root entry",rootEntry[key]);
-                        let entryKey=rootEntry[key]
-                        for(let msgKey in entryKey){
-                                entryKey[msgKey].smsId=msgKey
-                                allMessages.push(entryKey[msgKey])
-                        }
-                        
-                }
-                //console.log(allMessages);
-                this.setState({allChat:allMessages},()=>{
-                  this.chatData(this.state.allChat)
-                })
-        })
-
-        this.keyboardDidShowListener = Keyboard.addListener(
-        'keyboardDidShow',
-        this._keyboardDidShow,
-        );
-        this.keyboardDidHideListener = Keyboard.addListener(
-        'keyboardDidHide',
-        this._keyboardDidHide,
-        );
-}
-
-
-componentWillUnmount() {
-  this.keyboardDidShowListener.remove();
-  this.keyboardDidHideListener.remove();
-}
-
-_keyboardDidShow= (e)=> {
-  //console.log(e.endCoordinates.height);
-  if (this.state.position !== 'relative') {
-  this.setState({
-  position: 'relative',paddingHeight:e.endCoordinates.height
-  },()=>{
-  console.log(this.state.paddingHeight)
-  })
-  }
-}
-
-_keyboardDidHide =(e) =>{
-        if (this.state.position !== 'absolute') {
-          this.setState({
-            position: 'absolute',paddingHeight:0
-          },()=>{
-          })
-        }
-}
-
-
-sendMessege(inputmessage){
-        if(inputmessage == '' || inputmessage == undefined || inputmessage == null){
-                alert(languageJSON.chat_blank);
-        }else{
-              let bookingData=database().ref('bookings/'+this.getParamData.bookingId)
-              bookingData.once('value',response => {
-                  if(response.val()){
-                          this.setState({carbookedInfo:response.val()},()=>{  
-                          let currentUserUid=firebase.auth().currentUser.uid
-                          var today = new Date();
-                          var time = today.getHours() + ":" + today.getMinutes();
-                          //console.log(time);
-                          var dd = String(today.getDate()).padStart(2, '0');
-                          var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-                          var yyyy = today.getFullYear();
-                          today = mm + ':' + dd + ':' + yyyy;
-                          //console.log(today)
-                          let customer=this.state.carbookedInfo.customer;
-                          let driver=this.state.carbookedInfo.driver
-                          let totalId=this.state.carbookedInfo.customer + ',' + this.state.carbookedInfo.driver
-                          //console.log(totalId);
-                          this.setState({id:totalId})
-                          let chat=firebase.database().ref('chat')
-                          chat.once('value',chat=>{
-                            if(chat.val()){
-                              let allChat=chat.val();
-                              for(let key in allChat){
-                                if(this.getParamData.bookingId == key){
-                                  this.setState({idFound:true})
-                                }
-                              }
-                              if(this.state.idFound == true){
-                                  //console.log("allChat",allChat);
-                                  firebase.database().ref('chat'+ '/' + this.getParamData.bookingId + '/'+ 'message' + '/' + this.state.id).push({
-                                    message:inputmessage,
-                                    from:currentUserUid,
-                                    type:"msg",
-                                    msgDate:today,
-                                    msgTime:time,
-                                    source:"driver"
-                                  })
-                              } 
-                              else{
-                                  firebase.database().ref('chat'+ '/' +this.getParamData.bookingId + '/').update({
-                                      distance:this.state.carbookedInfo.distance,
-                                      car:this.state.carbookedInfo.carType,
-                                      bookingId:this.getParamData.bookingId
-                                    }).then(()=>{
-                                      firebase.database().ref('chat'+ '/' +this.getParamData.bookingId + '/'+ 'message' + '/' + this.state.id).push({
-                                          message:inputmessage,
-                                          from:currentUserUid,
-                                          type:"msg",
-                                          msgDate:today,
-                                          msgTime:time,
-                                          source:"driver"
-                                        })
-                                        this.sendPushNotification(this.state.carbookedInfo.customer,this.getParamData.bookingId, languageJSON.driver + this.state.carbookedInfo.driver_name + languageJSON.send_msg + inputmessage);
-                                  })
-                              }
-                            }else{
-                                    firebase.database().ref('chat'+ '/' +this.getParamData.bookingId + '/').update({
-                                    distance:this.state.carbookedInfo.distance,
-                                    car:this.state.carbookedInfo.carType,
-                                    bookingId:this.getParamData.bookingId
-                                }).then(()=>{
-                                      if(this.state.id){
-                                        firebase.database().ref('chat'+ '/' +this.getParamData.bookingId + '/'+ 'message' + '/' + this.state.id).push({
-                                          message:inputmessage,
-                                          from:currentUserUid,
-                                          type:"msg",
-                                          msgDate:today,
-                                          msgTime:time,
-                                          source:"driver"
-                                          })
-                                          this.sendPushNotification(this.state.carbookedInfo.customer,this.getParamData.bookingId, languageJSON.driver + this.state.carbookedInfo.driver_name + languageJSON.send_msg + inputmessage);
-                                      }else{
-                                        //alert("ID not found");
-                                      }
-                                })
-                            }
-                          })
-                    }
-                    )
-                  }
-                })
-                this.setState({inputmessage:""})   
-        }     
-}
-
-  renderItem({ item }) {
-    return (
-                      
-          item.source== "driver"? 
-          <View style={styles.drivermsgStyle}>
-          <Text style={styles.msgTextStyle}>{item?item.message: languageJSON.chat_history_not_found}</Text>
-          <Text style={styles.msgTimeStyle}>{item?item.msgTime:null}</Text>
-          </View>
-          :
-          <View style={styles.riderMsgStyle}>
-          <Text style={styles.riderMsgText}>{item?item.message: languageJSON.chat_history_not_found}</Text>
-          <Text style={styles.riderMsgTime}>{item?item.msgTime:null}</Text> 
-          </View>
-                        
-    );
+    };
   }
  
+
+   componentDidMount() {
+    this.getParamData =  this.props.route.params.passData;
+    let bookingData=database().ref('bookings/'+this.getParamData.id)
+    console.log(this.getParamData)
+    bookingData.on('value',response => {
+      if(response.val()){
+        this.setState({carbookedInfo:response.val()})
+      }
+    })
+    let msgData=database().ref(`chat/`+this.getParamData.id + '/message')
+    msgData.on('value',msgData=>{
+            let rootEntry=msgData.val();
+            let allMesseges=[]
+            for(let key in rootEntry){
+                    let entryKey=rootEntry[key]
+                    for(let msgKey in entryKey){
+                            entryKey[msgKey].smsId=msgKey
+                            allMesseges.push(entryKey[msgKey])
+                    }
+                    
+            }
+            this.setState({allChat:allMesseges})       
+    })
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      this._keyboardDidShow,
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this._keyboardDidHide,
+    );
+  }
+
+      
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+  _keyboardDidShow= (e)=> {
+    console.log(e.endCoordinates.height);
+    if (this.state.position !== 'relative') {
+      this.setState({
+      position: 'relative',paddingHeight:e.endCoordinates.height
+      },()=>{
+        console.log(this.state.paddingHeight)
+      })
+      }
+  }
+
+  _keyboardDidHide =(e) =>{
+    if (this.state.position !== 'absolute') {
+      this.setState({
+      position: 'absolute',paddingHeight:0
+      },()=>{
+      })
+      }
+  }
+
+
+  sendMessege(inputmessage){
+    var today = new Date();
+    var time = today.getHours() + ":" + today.getMinutes();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = mm + ':' + dd + ':' + yyyy;
+    
+    let customer=this.state.carbookedInfo.customer;
+    let driver=this.state.carbookedInfo.driver
+    let totalId=this.state.carbookedInfo.customer + ',' + this.state.carbookedInfo.driver
+    console.log(totalId);
+    this.setState({id:totalId})
+
+    if(inputmessage == '' || inputmessage == undefined || inputmessage == null){
+      alert("Please write something...");
+    }else{
+    let chat=database().ref('chat')
+    // if(chat){
+    chat.once('value',chat=>{
+      if(chat.val()){
+        let allChat=chat.val();
+        for(let key in allChat){
+          if(this.getParamData.id == key){
+            this.setState({chat:true})
+          }
+        }
+        if(this.state.chat == true){
+          database().ref('chat'+ '/' +this.getParamData.id + '/'+ 'message' + '/' + this.state.id).push({
+            message:inputmessage,
+            from:this.state.carbookedInfo.customer,
+            type:"msg",
+            msgDate:today,
+            msgTime:time,
+            source:"rider"
+          })
+          this.sendPushNotification(this.state.carbookedInfo.driver,this.getParamData.id,'Rider '+ this.state.carbookedInfo.customer_name+ ', has sent a messege to you: \n'+inputmessage)
+        } 
+        else{
+          database().ref('chat'+ '/' +this.getParamData.id + '/').update({
+              distance:this.state.carbookedInfo.distance,
+              car:this.state.carbookedInfo.carType,
+              bookingId:this.getParamData.id
+            }).then(()=>{
+            database().ref('chat'+ '/' +this.getParamData.id + '/'+ 'message' + '/' + this.state.id).push({
+                message:inputmessage,
+                from:this.state.carbookedInfo.customer,
+                type:"msg",
+                msgDate:today,
+                msgTime:time,
+                source:"rider"
+              })
+              this.sendPushNotification(this.state.carbookedInfo.customer,this.getParamData.id,'Driver '+ this.state.carbookedInfo.driver_name+ ', sent a messege to you: \n'+inputmessage);
+        })
+        }
+      }else{
+        database().ref('chat'+ '/' +this.getParamData.id + '/').update({
+        distance:this.state.carbookedInfo.distance,
+        car:this.state.carbookedInfo.carType,
+        bookingId:this.getParamData.id
+        }).then(()=>{
+          if(this.state.id){
+            database().ref('chat'+ '/' +this.getParamData.id + '/'+ 'message' + '/' + this.state.id).push({
+              message:inputmessage,
+              from:this.state.carbookedInfo.customer,
+              type:"msg",
+              msgDate:today,
+              msgTime:time,
+              source:"rider"
+              })
+              this.sendPushNotification(this.state.carbookedInfo.driver,this.getParamData.id,'Rider '+ this.state.carbookedInfo.customer_name+ ', has sent a messege to you: \n'+inputmessage)
+          }else{}
+
+    })
+      }
+    })
+    this.setState({inputmessage:""});
+  }
+  }
+
   sendPushNotification(customerUID,bookingId,msg){
-    const customerRoot=firebase.database().ref('users/'+customerUID);
+    console.log('fjkfjffj')
+    const customerRoot=database().ref('users/'+customerUID);
     customerRoot.once('value',customerData=>{
         if(customerData.val()){
             let allData = customerData.val()
+            console.log('data',allData)
             RequestPushMsg(allData.pushToken?allData.pushToken:null,msg)
         }
     })
-  }
+}
+renderItem({ item }) {
+  return (
+                    
+    item.source == "rider"? 
+    <View style={styles.drivermsgStyle}>
+    <Text style={styles.msgTextStyle}>{item?item.message:languageJSON.chat_not_found}</Text>
+    <Text style={styles.msgTimeStyle}>{item?item.msgTime:null}</Text>
+    </View>
+    :
+    <View style={styles.riderMsgStyle}>
+    <Text style={styles.riderMsgText}>{item?item.message:languageJSON.chat_not_found}</Text>
+    <Text style={styles.riderMsgTime}>{item?item.msgTime:null}</Text> 
+    </View>
+                      
+  );
+}
+
+
 
 render() {
   return (
     <View style={styles.container}>
-        <Header 
-            backgroundColor={colors.GREY.default}
-            leftComponent={{icon:'angle-left', type:'font-awesome', color: colors.WHITE, size: 30, component: TouchableWithoutFeedback,onPress: ()=>{this.props.navigation.goBack();} }}
-            centerComponent={<Text style={styles.headerTitleStyle}>{languageJSON.chat}</Text>}
-            containerStyle={styles.headerStyle}
-            innerContainerStyles={styles.inrContStyle}
-            statusBarProps={{ barStyle: 'light-content' }}
-            barStyle="light-content" 
-            containerStyle={{
-              justifyContent: 'space-around',
-              height:60
-
-            }}
-        /> 
+       
       <FlatList
         data={this.state.allChat.reverse()}
         renderItem={this.renderItem}
@@ -255,12 +230,12 @@ render() {
             value={this.state.inputmessage}
             style={styles.input}
             underlineColorAndroid="transparent"
-            placeholder={languageJSON.type_messege}
+            placeholder={languageJSON.chat_input_title}
             onChangeText={text => this.setState({ inputmessage: text })}
           />
          
           <TouchableOpacity onPress={() => this.sendMessege(this.state.inputmessage)}>
-            <Text style={styles.send}>{languageJSON.send}</Text>
+            <Text style={styles.send}>{languageJSON.send_button_text}</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -343,7 +318,7 @@ send: {
   fontSize: 16,
   fontWeight: 'bold',
   padding: 20
-},
+} ,
 drivermsgStyle:{
   backgroundColor:colors.GREY.default,
   marginBottom:5,
