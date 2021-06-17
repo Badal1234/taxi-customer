@@ -8,7 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* asurtransferTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* asurtransferTests.m */; };
-		5720E2F9267A7958000E614F /* asurtransfer in Resources */ = {isa = PBXBuildFile; fileRef = 5720E2F8267A7958000E614F /* asurtransfer */; };
+		578EA0FA267A7E3700DEA270 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 578EA0F9267A7E3700DEA270 /* GoogleService-Info.plist */; };
+		57E25B5B267A8723001E63E5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57E25B54267A8723001E63E5 /* LaunchScreen.storyboard */; };
+		57E25B5D267A8723001E63E5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 57E25B57267A8723001E63E5 /* main.m */; };
+		57E25B5E267A8723001E63E5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57E25B58267A8723001E63E5 /* Images.xcassets */; };
+		57E25B5F267A8723001E63E5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 57E25B59267A8723001E63E5 /* AppDelegate.m */; };
 		CEF2346BF6C3D36AB53198FE /* libPods-asurtransfer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F8E44F9932CD709CA53D34 /* libPods-asurtransfer.a */; };
 		D78F8123BC022A110E8CB87A /* libPods-asurtransfer-asurtransferTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06C5BF196A0F7C14053929EF /* libPods-asurtransfer-asurtransferTests.a */; };
 /* End PBXBuildFile section */
@@ -32,7 +36,14 @@
 		13800F9CA537968C76DC4D1E /* Pods-asurtransfer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-asurtransfer.debug.xcconfig"; path = "Target Support Files/Pods-asurtransfer/Pods-asurtransfer.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* asurtransfer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = asurtransfer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		19F8E44F9932CD709CA53D34 /* libPods-asurtransfer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-asurtransfer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5720E2F8267A7958000E614F /* asurtransfer */ = {isa = PBXFileReference; lastKnownFileType = folder; path = asurtransfer; sourceTree = "<group>"; };
+		578EA0F9267A7E3700DEA270 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		57E25B54267A8723001E63E5 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		57E25B55267A8723001E63E5 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		57E25B56267A8723001E63E5 /* GoogleService-Info .plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info .plist"; sourceTree = "<group>"; };
+		57E25B57267A8723001E63E5 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		57E25B58267A8723001E63E5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		57E25B59267A8723001E63E5 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		57E25B5A267A8723001E63E5 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		82C8C3570F6214013D9CE758 /* Pods-asurtransfer-asurtransferTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-asurtransfer-asurtransferTests.release.xcconfig"; path = "Target Support Files/Pods-asurtransfer-asurtransferTests/Pods-asurtransfer-asurtransferTests.release.xcconfig"; sourceTree = "<group>"; };
 		AA34D7FF216CA1A65BAA8E0B /* Pods-asurtransfer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-asurtransfer.release.xcconfig"; path = "Target Support Files/Pods-asurtransfer/Pods-asurtransfer.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -85,6 +96,20 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		57E25B53267A8723001E63E5 /* asurtransfer */ = {
+			isa = PBXGroup;
+			children = (
+				57E25B54267A8723001E63E5 /* LaunchScreen.storyboard */,
+				57E25B55267A8723001E63E5 /* AppDelegate.h */,
+				57E25B56267A8723001E63E5 /* GoogleService-Info .plist */,
+				57E25B57267A8723001E63E5 /* main.m */,
+				57E25B58267A8723001E63E5 /* Images.xcassets */,
+				57E25B59267A8723001E63E5 /* AppDelegate.m */,
+				57E25B5A267A8723001E63E5 /* Info.plist */,
+			);
+			path = asurtransfer;
+			sourceTree = "<group>";
+		};
 		737F53CF96D90FBCB9C391A6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -106,7 +131,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				5720E2F8267A7958000E614F /* asurtransfer */,
+				57E25B53267A8723001E63E5 /* asurtransfer */,
+				578EA0F9267A7E3700DEA270 /* GoogleService-Info.plist */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* asurtransferTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -220,7 +246,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5720E2F9267A7958000E614F /* asurtransfer in Resources */,
+				578EA0FA267A7E3700DEA270 /* GoogleService-Info.plist in Resources */,
+				57E25B5E267A8723001E63E5 /* Images.xcassets in Resources */,
+				57E25B5B267A8723001E63E5 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,6 +394,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57E25B5F267A8723001E63E5 /* AppDelegate.m in Sources */,
+				57E25B5D267A8723001E63E5 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
